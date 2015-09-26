@@ -1,0 +1,16 @@
+{
+  "name": "multiprocessing",
+  "version": "0.0.0",
+  "description": "Python multiprocessing Pool clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha index.spec.js"
+  },
+  "keywords": [
+    "multiprocessing",
+    "parallel",
+    "multicore"
+  ],
+  "author": "Ryan Pon",
+  "license": "MIT"
+}
