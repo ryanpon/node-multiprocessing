@@ -1,16 +1,27 @@
 {
   "name": "multiprocessing",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Python multiprocessing Pool clone",
   "main": "index.js",
   "scripts": {
-    "test": "mocha index.spec.js"
+    "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js",
+    "bench": "node ./test/bench.js"
   },
   "keywords": [
     "multiprocessing",
     "parallel",
-    "multicore"
+    "multicore",
+    "map",
+    "pool"
   ],
   "author": "Ryan Pon",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^2.10.1",
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3"
+  },
+  "devDependencies": {
+    "lodash": "^3.10.1"
+  }
 }
