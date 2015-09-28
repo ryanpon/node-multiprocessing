@@ -9,6 +9,85 @@ describe('Pool', function () {
 
   describe('#close', function () {
 
+    it('should stop child processes', function () {
+      var pool = new Pool(4);
+      pool.close();
+      var threwErr = false;
+      return pool.map([1, 2, 3, 4, 5], function (n) {
+        return n * 2;
+      })
+        .catch(function (err) {
+          threwErr = true;
+          err.should.match(/Pool has been closed/);
+          pool.workers.forEach(function (worker) {
+            worker.process.connected.should.be.false;
+          });
+        })
+        .finally(function () {
+          threwErr.should.be.true;
+        });
+    });
+
+    it('should not interrupt running jobs', function () {
+      var pool = new Pool(4);
+      var job = pool.map([1, 2, 3], function (n) {
+        return n * 2;
+      });
+      pool.close();
+
+      return job.then(function (result) {
+        result.should.eql([2, 4, 6]);
+      })
+      .then(function () {
+        pool.workers.forEach(function (worker) {
+          worker.process.connected.should.be.false;
+        });
+      });
+    });
+
+  });
+
+  describe('#terminate', function () {
+
+    it('should stop child processes', function () {
+      var pool = new Pool(4);
+      pool.terminate();
+      var threwErr = false;
+      return pool.map([1, 2, 3, 4, 5], function (n) {
+        return n * 2;
+      })
+        .catch(function (err) {
+          threwErr = true;
+          err.should.match(/Pool has been closed/);
+          pool.workers.forEach(function (worker) {
+            worker.process.connected.should.be.false;
+          });
+        })
+        .finally(function () {
+          threwErr.should.be.true;
+        });
+    });
+
+    it('should interrupt running jobs', function () {
+      var pool = new Pool(4);
+      var job = pool.map([1, 2, 3], function (n) {
+        return n * 2;
+      });
+      pool.terminate();
+
+      return job
+        .then(function () {
+          throw new Error('Should not reach here');
+        }, function (err) {
+          err.should.match(/Pool was closed/);
+        })
+        .then(function () {
+          pool.workers.forEach(function (worker) {
+            worker.process.connected.should.be.false;
+          });
+        });
+    });
+
   });
 
   describe('#map', function () {
