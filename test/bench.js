@@ -3,7 +3,8 @@
 var Pool = require('../').Pool;
 var _    = require('lodash');
 
-// pool map has about 300ms overhead on my i7 mac
+// pool map has about 300ms overhead on my i7 mac with chunksize 1
+// pool map has about 100ms overhead on my i7 mac with default chunksize
 var base = _.range(10000);
 
 console.time('builtin map');
