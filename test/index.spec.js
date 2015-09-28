@@ -1,9 +1,12 @@
 'use strict';
 
 var Pool   = require('../').Pool;
-var should = require('chai').should();
+var chai   = require('chai');
+var should = chai.should();
 var P      = require('bluebird');
 var _      = require('lodash');
+
+chai.use(require('chai-as-promised'));
 
 describe('Pool', function () {
 
@@ -12,20 +15,16 @@ describe('Pool', function () {
     it('should stop child processes', function () {
       var pool = new Pool(4);
       pool.close();
-      var threwErr = false;
       return pool.map([1, 2, 3, 4, 5], function (n) {
         return n * 2;
       })
         .catch(function (err) {
-          threwErr = true;
-          err.should.match(/Pool has been closed/);
           pool.workers.forEach(function (worker) {
             worker.process.connected.should.be.false;
           });
+          throw err;
         })
-        .finally(function () {
-          threwErr.should.be.true;
-        });
+        .should.be.rejectedWith(/Pool has been closed/);
     });
 
     it('should not interrupt running jobs', function () {
@@ -52,20 +51,16 @@ describe('Pool', function () {
     it('should stop child processes', function () {
       var pool = new Pool(4);
       pool.terminate();
-      var threwErr = false;
       return pool.map([1, 2, 3, 4, 5], function (n) {
         return n * 2;
       })
         .catch(function (err) {
-          threwErr = true;
-          err.should.match(/Pool has been closed/);
           pool.workers.forEach(function (worker) {
             worker.process.connected.should.be.false;
           });
+          throw err;
         })
-        .finally(function () {
-          threwErr.should.be.true;
-        });
+        .should.be.rejectedWith(/Pool has been closed/);
     });
 
     it('should interrupt running jobs', function () {
@@ -129,20 +124,13 @@ describe('Pool', function () {
     });
 
     it('should handle errors', function () {
-      var threwErr = false;
       return new Pool(2).map([1, 2, 3], function (n) {
         if (n === 2) {
           throw new Error('test error');
         }
         return n;
       })
-        .catch(function (err) {
-          threwErr = true;
-          err.should.match(/test error/);
-        })
-        .finally(function () {
-          threwErr.should.be.true;
-        });
+        .should.be.rejectedWith(/test error/);
     });
 
     it('should work with more workers than items to process', function () {
@@ -186,9 +174,57 @@ describe('Pool', function () {
     });
 
     it('should throw an error if no worker function or module provided', function () {
-      (function () {
-        return new Pool(2).map([1], 123);
-      }).should.throw(/fnOrModulePath must be a function or a string/);
+      return new Pool(2).map([1], 123)
+        .should.be.rejectedWith(/fnOrModulePath must be a function or a string/);
+    });
+
+    it('should process multiple jobs sequentially', function () {
+      var pool = new Pool(5);
+      var jobsCompleted = 0;
+      var fn = function (n) { return n; };
+      return P.all([
+        pool.map(_.range(1000), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(1);
+          }),
+        pool.map(_.range(5), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(2);
+          }),
+        pool.map(_.range(100), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(3);
+          })
+      ]);
+    });
+
+    it('should still work after processing multiple jobs', function () {
+      var pool = new Pool(2);
+      var fn = function (n) { return n * 5; };
+      return P.all([
+        pool.map(_.range(50), fn),
+        pool.map(_.range(75), fn),
+        pool.map(_.range(100), fn)
+      ])
+        .then(function () {
+          pool.map(_.range(50), fn);
+          return pool.map([5, 7, 1], fn);
+        })
+        .then(function (result) {
+          result.should.eql([25, 35, 5]);
+        });
+    });
+
+    it('should work with chunksize larger than job', function () {
+      var pool = new Pool(2);
+      var fn = function (n) { return n * 2; };
+      return pool.map([5, 7, 1], fn, 100)
+        .then(function (result) {
+          result.should.eql([10, 14, 2]);
+        });
     });
 
   });

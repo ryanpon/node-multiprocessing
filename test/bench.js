@@ -23,7 +23,6 @@ pool.map(base, function (i) {
 })
 .then(function () {
   console.timeEnd('pool map');
-
   process.exit(0);
 })
 .catch(function (err) {
