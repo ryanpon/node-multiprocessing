@@ -227,6 +227,15 @@ describe('Pool', function () {
         });
     });
 
+    it('should work with a module name', function () {
+      var pool = new Pool(2);
+      return pool.map(['Ryan', 'World'], __dirname + '/sample-module')
+        .then(function (result) {
+          should.exist(result);
+          result.should.eql(['Hello, Ryan!', 'Hello, World!']);
+        });
+    });
+
   });
 
   describe('#apply', function () {
@@ -256,6 +265,15 @@ describe('Pool', function () {
       ])
         .then(function (results) {
           results.should.eql([10, 20, 30, 40, 50, [60]]);
+        });
+    });
+
+    it('should work with a module name', function () {
+      var pool = new Pool(2);
+      return pool.apply('World', __dirname + '/sample-module')
+        .then(function (result) {
+          should.exist(result);
+          result.should.equal('Hello, World!');
         });
     });
 
