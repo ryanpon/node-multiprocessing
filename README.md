@@ -26,14 +26,12 @@ pool.map([1, 2, 3], square)
 Via npm:
 
     npm install multiprocessing
-    
-## API Reference
 
-## API
+## API Reference
 
 ### new Pool(int numWorkers) -> Pool
 
-Create a new Pool with specified number of worker child processes. 
+Create a new Pool with specified number of worker child processes.
 
 Recommended setting is the number of logical CPUs that your machine has.
 
