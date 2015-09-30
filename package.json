@@ -1,7 +1,7 @@
 {
   "name": "multiprocessing",
   "version": "0.0.1",
-  "description": "Python multiprocessing Pool clone",
+  "description": "Dead simple parallel processing for node",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js",
