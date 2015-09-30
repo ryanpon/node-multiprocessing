@@ -178,25 +178,43 @@ describe('Pool', function () {
         .should.be.rejectedWith(/fnOrModulePath must be a function or a string/);
     });
 
-    it('should process multiple jobs sequentially', function () {
+    it.skip('should process multiple jobs sequentially for chunksizes of 1', function () {
       var pool = new Pool(5);
       var jobsCompleted = 0;
       var fn = function (n) { return n; };
       return P.all([
-        pool.map(_.range(1000), fn, 1)
+        pool.map(_.range(500), fn, 1)
           .then(function () {
             jobsCompleted++;
             jobsCompleted.should.equal(1);
           }),
-        pool.map(_.range(5), fn, 1)
+        pool.map(_.range(500), fn, 1)
           .then(function () {
             jobsCompleted++;
             jobsCompleted.should.equal(2);
           }),
-        pool.map(_.range(100), fn, 1)
+        pool.map(_.range(500), fn, 1)
           .then(function () {
             jobsCompleted++;
             jobsCompleted.should.equal(3);
+          })
+      ]);
+    });
+
+    it.skip('should utilize all workers at once', function () {
+      var pool = new Pool(5);
+      var jobsCompleted = 0;
+      var fn = function (n) { return n; };
+      return P.all([
+        pool.map(_.range(500), fn, 200)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(2);
+          }),
+        pool.map(_.range(5), fn, 5)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(1);
           })
       ]);
     });
