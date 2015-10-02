@@ -178,6 +178,7 @@ describe('Pool', function () {
         .should.be.rejectedWith(/fnOrModulePath must be a function or a string/);
     });
 
+    // TODO: these tests arent reliable
     it.skip('should process multiple jobs sequentially for chunksizes of 1', function () {
       var pool = new Pool(5);
       var jobsCompleted = 0;
@@ -201,6 +202,7 @@ describe('Pool', function () {
       ]);
     });
 
+    // TODO: these tests arent reliable
     it.skip('should utilize all workers at once', function () {
       var pool = new Pool(5);
       var jobsCompleted = 0;

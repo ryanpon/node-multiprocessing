@@ -1,6 +1,7 @@
 # node-multiprocessing
 Dead simple parallel processing for node
 
+
 ## Example
 
 ```javascript
@@ -26,6 +27,7 @@ pool.map([1, 2, 3], square)
 Via npm:
 
     npm install multiprocessing
+
 
 ## API Reference
 
@@ -55,6 +57,11 @@ function bad(x) {
   return x * two;  // "two" wont be defined after being passed to the child proc
 }
 ```
+
+### .apply(any arg, Function|String fnOrModulePath) -> Promise
+
+A convenience method for calling map with a single argument. Useful for when you want to use the pool as a queue that processes jobs in a first-come, first-served manner.
+
 
 ## License
 
