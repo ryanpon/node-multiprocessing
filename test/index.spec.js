@@ -178,49 +178,6 @@ describe('Pool', function () {
         .should.be.rejectedWith(/fnOrModulePath must be a function or a string/);
     });
 
-    // TODO: these tests arent reliable
-    it.skip('should process multiple jobs sequentially for chunksizes of 1', function () {
-      var pool = new Pool(5);
-      var jobsCompleted = 0;
-      var fn = function (n) { return n; };
-      return P.all([
-        pool.map(_.range(500), fn, 1)
-          .then(function () {
-            jobsCompleted++;
-            jobsCompleted.should.equal(1);
-          }),
-        pool.map(_.range(500), fn, 1)
-          .then(function () {
-            jobsCompleted++;
-            jobsCompleted.should.equal(2);
-          }),
-        pool.map(_.range(500), fn, 1)
-          .then(function () {
-            jobsCompleted++;
-            jobsCompleted.should.equal(3);
-          })
-      ]);
-    });
-
-    // TODO: these tests arent reliable
-    it.skip('should utilize all workers at once', function () {
-      var pool = new Pool(5);
-      var jobsCompleted = 0;
-      var fn = function (n) { return n; };
-      return P.all([
-        pool.map(_.range(500), fn, 200)
-          .then(function () {
-            jobsCompleted++;
-            jobsCompleted.should.equal(2);
-          }),
-        pool.map(_.range(5), fn, 5)
-          .then(function () {
-            jobsCompleted++;
-            jobsCompleted.should.equal(1);
-          })
-      ]);
-    });
-
     it('should still work after processing multiple jobs', function () {
       var pool = new Pool(2);
       var fn = function (n) { return n * 5; };
@@ -270,11 +227,11 @@ describe('Pool', function () {
         });
     });
 
-    it('should be able handle simultaneous calls', function () {
+    it('should be able to handle simultaneous calls', function () {
       var fn = function (n) {
         return n * 10;
       };
-      var pool = new Pool(2);
+      var pool = new Pool(4);
       return P.all([
         pool.apply(1, fn),
         pool.apply(2, fn),
@@ -299,5 +256,49 @@ describe('Pool', function () {
 
   });
 
+  describe('Queue behavior', function () {
+
+    it('should process multiple jobs sequentially for chunksizes of 1', function () {
+      var pool = new Pool(5);
+      var jobsCompleted = 0;
+      var fn = function (n) { return n; };
+      return P.all([
+        pool.map(_.range(501), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(1);
+          }),
+        pool.map(_.range(502), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(2);
+          }),
+        pool.map(_.range(503), fn, 1)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(3);
+          })
+      ]);
+    });
+
+    it('should utilize all workers at once', function () {
+      var pool = new Pool(5);
+      var jobsCompleted = 0;
+      var fn = function (n) { return n; };
+      return P.all([
+        pool.map(_.range(500), fn, 200)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(2);
+          }),
+        pool.map(_.range(5), fn, 5)
+          .then(function () {
+            jobsCompleted++;
+            jobsCompleted.should.equal(1);
+          })
+      ]);
+    });
+
+  });
 
 });
