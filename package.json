@@ -2,6 +2,10 @@
   "name": "multiprocessing",
   "version": "0.0.4",
   "description": "Dead simple parallel processing for node",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryanpon/node-multiprocessing"
+  },
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js",
