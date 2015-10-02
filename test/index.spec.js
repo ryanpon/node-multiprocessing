@@ -281,17 +281,18 @@ describe('Pool', function () {
       ]);
     });
 
-    it('should utilize all workers at once', function () {
-      var pool = new Pool(5);
+    // TODO: need a better way to test this
+    it.skip('should utilize all workers at once', function () {
+      var pool = new Pool(3);
       var jobsCompleted = 0;
       var fn = function (n) { return n; };
       return P.all([
-        pool.map(_.range(500), fn, 200)
+        pool.map(_.range(1000), fn, 500)
           .then(function () {
             jobsCompleted++;
             jobsCompleted.should.equal(2);
           }),
-        pool.map(_.range(5), fn, 5)
+        pool.map(_.range(1), fn, 1)
           .then(function () {
             jobsCompleted++;
             jobsCompleted.should.equal(1);
