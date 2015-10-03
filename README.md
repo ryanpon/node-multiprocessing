@@ -31,11 +31,11 @@ Via npm:
 
 ## API Reference
 
-### new Pool(int numWorkers) -> Pool
+### new Pool([int numWorkers]) -> Pool
 
 Create a new Pool with specified number of worker child processes.
 
-Recommended setting is the number of logical CPUs that your machine has.
+Default number of workers will be the numbers of logical CPUs on the machine.
 
 ### .map(Array arr, Function|String fnOrModulePath[, int chunksize]) -> Promise
 
