@@ -1,6 +1,5 @@
 {
   "env": {
-    "browser": true,
     "node": true
   },
 
@@ -17,6 +16,7 @@
     }],
     "no-use-before-define": 2,
     "no-undef": 2,
+    "no-delete-var": 2,
 
 /**
  * Possible errors
@@ -34,7 +34,6 @@
     "no-empty": 2,
     "no-ex-assign": 2,
     "no-extra-boolean-cast": 0,
-    "no-extra-parens": 2,
     "no-extra-semi": 2,
     "no-func-assign": 2,
     "no-inner-declarations": 2,
@@ -53,6 +52,7 @@
 /**
  * Best practices
  */
+    "no-extra-boolean-cast": 2,
     "consistent-return": 0,
     "curly": [2, "multi-line"],
     "default-case": 2,
@@ -94,6 +94,17 @@
 /**
  * Style
  */
+    "no-mixed-spaces-and-tabs": 2,
+    "no-lonely-if": 2,
+    "no-array-constructor": 2,
+    "no-new-object": 2,
+    "new-parens": 2,
+    "consistent-this": [2, "self"],
+    "space-unary-ops": [1, {"words": true, "nonwords": false}],
+    "space-in-parens": [2, "never"],
+    "object-curly-spacing": [2, "never"],
+    "space-before-blocks": [2, "always"],
+    "array-bracket-spacing": [2, "never"],
     "indent": [2, 2, {"SwitchCase": 1}],
     "brace-style": [2,
       "1tbs", {
@@ -119,6 +130,7 @@
     "no-multiple-empty-lines": [2, {
       "max": 2
     }],
+    "no-unneeded-ternary": 2,
     "no-nested-ternary": 2,
     "no-new-object": 2,
     "no-spaced-func": 2,
@@ -132,6 +144,7 @@
       "before": false,
       "after": true
     }],
+    "space-before-keywords": [2, "always"],
     "space-after-keywords": 2,
     "space-before-blocks": 2,
     "space-before-function-paren": [2, {
