@@ -17,7 +17,7 @@ describe('Pool', function () {
       pool.close();
       return pool.map([1, 2, 3, 4, 5], function (n) {
         return n * 2;
-      })
+      }, {chunksize: 2})
         .catch(function (err) {
           pool.workers.forEach(function (worker) {
             worker.process.connected.should.be.false;
@@ -34,14 +34,15 @@ describe('Pool', function () {
       });
       pool.close();
 
-      return job.then(function (result) {
-        result.should.eql([2, 4, 6]);
-      })
-      .then(function () {
-        pool.workers.forEach(function (worker) {
-          worker.process.connected.should.be.false;
+      return job
+        .then(function (result) {
+          result.should.eql([2, 4, 6]);
+        })
+        .then(function () {
+          pool.workers.forEach(function (worker) {
+            worker.process.connected.should.be.false;
+          });
         });
-      });
     });
 
   });
@@ -298,6 +299,44 @@ describe('Pool', function () {
             jobsCompleted.should.equal(1);
           })
       ]);
+    });
+
+  });
+
+  describe('Timeouts', function () {
+
+    it('should terminate a job if the task does not return within given timeout', function () {
+      var pool = new Pool(1);
+      var fn = function (n) {
+        while (n === 2) {
+          continue;
+        }
+        return n;
+      };
+
+      return pool.map([1, 2, 3, 4, 5], fn, {
+        timeout: 250
+      })
+        .should.be.rejectedWith(/Task timed out/)
+        .then(function () {
+          return pool.map([1, 2, 3, 4, 5], function (n) {
+            return n;
+          });
+        })
+        .then(function (res) {
+          res.should.eql([1, 2, 3, 4, 5]);
+        });
+    });
+
+    it('should not terminate jobs that do not time out', function () {
+      var pool = new Pool(3);
+      var fn = function (n) {
+        return n;
+      };
+
+      return pool.map([1, 2, 3, 4, 5], fn, {
+        timeout: 250
+      });
     });
 
   });
