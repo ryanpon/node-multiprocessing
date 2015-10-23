@@ -45,22 +45,22 @@ function bad(x) {
 
 ## API Reference
 
-### `new Pool([int numWorkers]) -> Pool`
+### new Pool([int numWorkers]) -> Pool
 
 Create a new Pool with specified number of worker child processes.
 
 Default number of workers will be the numbers of logical CPUs on the machine.
 
-##### `.map(Array arr, Function|String fnOrModulePath[, int|Object chunksizeOrOptions]) -> Promise`
+##### .map(Array arr, Function|String fnOrModulePath[, int|Object chunksizeOrOptions]) -> Promise
 
 The second argument should either be the mapper function or the absolute path of a module that exports the mapper function.
 
 As the function must be stringified before being passed to the child process, I recommend instead using the module path for functions of non-trivial size. It will be much easier than trying to keep track of what your mapper function references.
 
-###### Option: `chunksize`
+###### Option: chunksize
 Chunksize determines the number of array elements to be passed to the work process at once. By default, the chunksize will default to the array length divided by the number of available workers. Setting this to 1 is fine for tasks that are expected to be very large, but smaller tasks will run much faster with a larger chunksize.
 
-###### Option: `timeout` [experimental]
+###### Option: timeout [experimental]
 Approximate maximum processing time to allow for a single item in the array. If more than the alloted time passes, the mapper promise will be rejected with an error saying that the task timed out.
 
 Recommended that you use this only for longer tasks, or as a way to prevent infinite loops. Timeouts below 200ms or so can be unreliable.
@@ -76,24 +76,24 @@ var pool = new Pool(4);
 
 pool.map([1, 2, 3, 4, 5], anInfiniteLoop, {timeout: 1000})
   .catch(function (err) { console.log(err); });
-  
+
 // "Task timed out!"
 ```
 
-##### `.apply(any arg, Function|String fnOrModulePath[, Object options]) -> Promise`
+##### .apply(any arg, Function|String fnOrModulePath[, Object options]) -> Promise
 
 A convenience method for calling map with a single argument. Useful for when you want to use the pool as a queue that processes jobs in a first-come, first-served manner.
 
 Uses same options as map, but chunksize will be ignored.
 
 
-### `new PriorityQueue(numWorkers) -> PriorityQueue`
+### new PriorityQueue(numWorkers) -> PriorityQueue
 
 A max priority queue built off of a pool of worker processes. Items with a higher priority will be processed first.
 
-##### `.push(any arg, number priority, Function|String fnOrModulePath[, Object options]) -> Promise`
+##### .push(any arg, number priority, Function|String fnOrModulePath[, Object options]) -> Promise
 
-Pushes an item onto the queue and returns a promise that will be resolved with the result or rejected if any errors were raised. 
+Pushes an item onto the queue and returns a promise that will be resolved with the result or rejected if any errors were raised.
 
 ```javascript
 var PriorityQueue = require('multiprocessing').PriorityQueue;
