@@ -45,13 +45,13 @@ function bad(x) {
 
 ## API Reference
 
-### new Pool([int numWorkers]) -> Pool
+###`new Pool([int numWorkers]) -> Pool`
 
 Create a new Pool with specified number of worker child processes.
 
 Default number of workers will be the numbers of logical CPUs on the machine.
 
-### .map(Array arr, Function|String fnOrModulePath[, int|Object chunksizeOrOptions]) -> Promise
+#####`.map(Array arr, Function|String fnOrModulePath[, int|Object chunksizeOrOptions]) -> Promise`
 
 The second argument should either be the mapper function or the absolute path of a module that exports the mapper function.
 
@@ -80,13 +80,43 @@ pool.map([1, 2, 3, 4, 5], anInfiniteLoop, {timeout: 1000})
 // "Task timed out!"
 ```
 
-
-
-### .apply(any arg, Function|String fnOrModulePath, Object options) -> Promise
+#####`.apply(any arg, Function|String fnOrModulePath[, Object options]) -> Promise`
 
 A convenience method for calling map with a single argument. Useful for when you want to use the pool as a queue that processes jobs in a first-come, first-served manner.
 
-Uses same options as map, but chunksize isn't used.
+Uses same options as map, but chunksize will be ignored.
+
+
+###`new PriorityQueue(numWorkers) -> PriorityQueue`
+
+A max priority queue built off of a pool of worker processes. Items with a higher priority will be processed first.
+
+#####`.push(any arg, number priority, Function|String fnOrModulePath[, Object options]) -> Promise`
+
+Pushes an item onto the queue and returns a promise that will be resolved with the result or rejected if any errors were raised. 
+
+```javascript
+var PriorityQueue = require('multiprocessing').PriorityQueue;
+
+function square(x) {
+  return x * x;
+}
+
+// one worker guarantees ordering -- multiple workers will only start tasks in order
+var pq = new PriorityQueue(1);
+
+pq.push(25, 1, square).then(console.log),
+pq.push(100, 3, square).then(console.log),
+pq.push(50, 2, square).then(console.log),
+pq.push(10, 4, square).then(console.log)
+
+// >>> 625   <- low priority, but gets kicked off first
+// >>> 100   <- highest priority
+// >>> 10000
+// >>> 2500
+```
+
+Uses same options as Pool.map, but chunksize will be ignored.
 
 ## License
 
