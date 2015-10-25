@@ -86,6 +86,14 @@ A convenience method for calling map with a single argument. Useful for when you
 
 Uses same options as map, but chunksize will be ignored.
 
+##### .close()
+
+Terminates worker processes after waiting for outstanding jobs. Calling methods of the pool after this will result in an error.
+
+##### .terminate()
+
+Like `#close`, but will immediately terminate worker processes. All outstanding jobs at the time this method is called will have their promises rejected.
+
 
 ### new PriorityQueue(numWorkers) -> PriorityQueue
 
