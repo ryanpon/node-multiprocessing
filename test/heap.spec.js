@@ -38,4 +38,30 @@ describe('Heap', function () {
     should.not.exist(heap.popMax());
   });
 
+  it('should maintain ordering and elements during inserts and pop max', function () {
+    var arr  = _.range(1000).map(_.random.bind(_, 0, 1000000, false));
+    var heap = new Heap();
+    for (var i = 0; i < 500; i++) {
+      heap.insert(arr[i]);
+    }
+    var removed = [];
+    for (i = 0; i < 250; i++) {
+      removed.push(heap.popMax().elem);
+    }
+    for (i = 500; i < arr.length; i++) {
+      heap.insert(arr[i]);
+    }
+    removed.forEach(function (elem) {
+      heap.insert(elem);
+    });
+
+    var arrFromHeap = [];
+    while (heap.len) {
+      arrFromHeap.push(heap.popMax().elem);
+    }
+
+    var sortedArr = _.sortBy(arr).reverse();
+    arrFromHeap.should.eql(sortedArr);
+  });
+
 });
