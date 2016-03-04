@@ -288,6 +288,38 @@ describe('Pool', function () {
         });
     });
 
+    it('should handle callback errors', function () {
+      var fn = function (n, cb) {
+        if (n === 2) {
+          throw new Error('Number 2 is bad');
+        }
+        cb(null, n * 15);
+      };
+      var pool = new Pool(4);
+      return P.all([
+        pool.apply(1, fn),
+        pool.apply(2, fn),
+        pool.apply(3, fn)
+      ])
+        .should.be.rejectedWith(/Number 2 is bad/);
+    });
+
+    it('should handle unhandled callback errors', function () {
+      var fn = function (n, cb) {
+        if (n === 2) {
+          cb(new Error('Number 2 is bad'), n * 15);
+        }
+        cb(null, n * 15);
+      };
+      var pool = new Pool(4);
+      return P.all([
+        pool.apply(1, fn),
+        pool.apply(2, fn),
+        pool.apply(3, fn)
+      ])
+        .should.be.rejectedWith(/Number 2 is bad/);
+    });
+
   });
 
   describe('Queue behavior', function () {
