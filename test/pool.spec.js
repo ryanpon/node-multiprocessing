@@ -255,6 +255,39 @@ describe('Pool', function () {
         });
     });
 
+    it('should be able to handle callback based functions', function () {
+      var fn = function (n, cb) {
+        cb(null, n * 15);
+      };
+      var pool = new Pool(4);
+      return P.all([
+        pool.apply(1, fn),
+        pool.apply(2, fn)
+      ])
+        .then(function (results) {
+          results.should.eql([15, 30]);
+        });
+    });
+
+    it('should handle callback and non-callback based functions', function () {
+      var fn = function (n, cb) {
+        cb(null, n * 15);
+      };
+      var fn2 = function (n) {
+        return n * 20;
+      };
+      var pool = new Pool(4);
+      return P.all([
+        pool.apply(1, fn),
+        pool.apply(2, fn2),
+        pool.apply(3, fn),
+        pool.map([4, 8], fn2)
+      ])
+        .then(function (results) {
+          results.should.eql([15, 40, 45, [80, 160]]);
+        });
+    });
+
   });
 
   describe('Queue behavior', function () {
