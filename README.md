@@ -23,7 +23,6 @@ pool.map([1, 2, 3], square)
 
 ## Promise example
 ```javascript
-// job functions with an arity of 2 will be passed a callback
 var Pool = require('multiprocessing').Pool;
 
 function squareAsync(x) {
@@ -45,14 +44,14 @@ function squareAsync(x) {
 // ./worker.js
 
 // job functions with an arity of 2 will be passed a callback
-exports.squareAsync = function squareAsync(x, cb) {
+module.exports = function squareAsync(x, cb) {
   setTimeout(function () {
     cb(null, x * x);
   }, 1000);
 };
+```
 
-// ========================================================================== //
-
+```javascript
 // ./main.js
 
 var Pool = require('multiprocessing').Pool;
