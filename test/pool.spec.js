@@ -269,6 +269,40 @@ describe('Pool', function () {
         });
     });
 
+    it('should be able to handle promise based functions', function () {
+      var fn = function (n) {
+        return require('bluebird').resolve(n * 4).delay(10);
+      };
+      var pool = new Pool(2);
+      return P.all([
+        pool.apply(4, fn),
+        pool.apply(1, fn),
+        pool.apply(3, fn),
+        pool.apply(2, fn)
+      ])
+        .then(function (results) {
+          results.should.eql([16, 4, 12, 8]);
+        });
+    });
+
+    it('should handle promise rejections', function () {
+      var fn = function (n) {
+        var P = require('bluebird');
+        if (n === 1) {
+          return P.reject(new Error('My unlucky number'));
+        }
+        return P.resolve(n * 4).delay(10);
+      };
+      var pool = new Pool(3);
+      return P.all([
+        pool.apply(4, fn),
+        pool.apply(1, fn),
+        pool.apply(3, fn),
+        pool.apply(2, fn)
+      ])
+        .should.be.rejectedWith('My unlucky number');
+    });
+
     it('should handle callback and non-callback based functions', function () {
       var fn = function (n, cb) {
         cb(null, n * 15);
@@ -285,6 +319,30 @@ describe('Pool', function () {
       ])
         .then(function (results) {
           results.should.eql([15, 40, 45, [80, 160]]);
+        });
+    });
+
+    it('should handle all the function types', function () {
+      var fn = function (n, cb) {
+        cb(null, n * 15);
+      };
+      var fn2 = function (n) {
+        return n * 20;
+      };
+      var fn3 = function (n) {
+        var P = require('bluebird');
+        return P.resolve(n * 2);
+      };
+      var pool = new Pool(4);
+      return P.all([
+        pool.apply(1, fn),
+        pool.apply(2, fn2),
+        pool.apply(3, fn),
+        pool.map([4, 8], fn2),
+        pool.map([4, 8, 10], fn3)
+      ])
+        .then(function (results) {
+          results.should.eql([15, 40, 45, [80, 160], [8, 16, 20]]);
         });
     });
 
