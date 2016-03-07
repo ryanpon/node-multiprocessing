@@ -1,6 +1,6 @@
 {
   "name": "multiprocessing",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Dead simple parallel processing for node",
   "repository": {
     "type": "git",
