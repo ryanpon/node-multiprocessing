@@ -255,20 +255,6 @@ describe('Pool', function () {
         });
     });
 
-    it('should be able to handle callback based functions', function () {
-      var fn = function (n, cb) {
-        cb(null, n * 15);
-      };
-      var pool = new Pool(4);
-      return P.all([
-        pool.apply(1, fn),
-        pool.apply(2, fn)
-      ])
-        .then(function (results) {
-          results.should.eql([15, 30]);
-        });
-    });
-
     it('should be able to handle promise based functions', function () {
       var fn = function (n) {
         return require('bluebird').resolve(n * 4).delay(10);
@@ -303,79 +289,25 @@ describe('Pool', function () {
         .should.be.rejectedWith('My unlucky number');
     });
 
-    it('should handle callback and non-callback based functions', function () {
-      var fn = function (n, cb) {
-        cb(null, n * 15);
-      };
-      var fn2 = function (n) {
+    it('should handle promise and non-promise workers', function () {
+      var fn1 = function (n) {
         return n * 20;
       };
-      var pool = new Pool(4);
-      return P.all([
-        pool.apply(1, fn),
-        pool.apply(2, fn2),
-        pool.apply(3, fn),
-        pool.map([4, 8], fn2)
-      ])
-        .then(function (results) {
-          results.should.eql([15, 40, 45, [80, 160]]);
-        });
-    });
-
-    it('should handle all the function types', function () {
-      var fn = function (n, cb) {
-        cb(null, n * 15);
-      };
       var fn2 = function (n) {
-        return n * 20;
-      };
-      var fn3 = function (n) {
         var P = require('bluebird');
         return P.resolve(n * 2);
       };
       var pool = new Pool(4);
       return P.all([
-        pool.apply(1, fn),
         pool.apply(2, fn2),
-        pool.apply(3, fn),
+        pool.apply(1, fn1),
+        pool.apply(3, fn1),
         pool.map([4, 8], fn2),
-        pool.map([4, 8, 10], fn3)
+        pool.map([4, 8, 10], fn1)
       ])
         .then(function (results) {
-          results.should.eql([15, 40, 45, [80, 160], [8, 16, 20]]);
+          results.should.eql([4, 20, 60, [8, 16], [80, 160, 200]]);
         });
-    });
-
-    it('should handle callback errors', function () {
-      var fn = function (n, cb) {
-        if (n === 2) {
-          throw new Error('Number 2 is bad');
-        }
-        cb(null, n * 15);
-      };
-      var pool = new Pool(4);
-      return P.all([
-        pool.apply(1, fn),
-        pool.apply(2, fn),
-        pool.apply(3, fn)
-      ])
-        .should.be.rejectedWith(/Number 2 is bad/);
-    });
-
-    it('should handle unhandled callback errors', function () {
-      var fn = function (n, cb) {
-        if (n === 2) {
-          cb(new Error('Number 2 is bad'), n * 15);
-        }
-        cb(null, n * 15);
-      };
-      var pool = new Pool(4);
-      return P.all([
-        pool.apply(1, fn),
-        pool.apply(2, fn),
-        pool.apply(3, fn)
-      ])
-        .should.be.rejectedWith(/Number 2 is bad/);
     });
 
   });

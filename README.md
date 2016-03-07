@@ -21,41 +21,26 @@ pool.map([1, 2, 3], square)
 // [1, 4, 9]
 ```
 
-## Promise example
+## Promise + Module worker example
 ```javascript
-var Pool = require('multiprocessing').Pool;
+// ./worker.js
+var P = require('bluebird');
 
-function squareAsync(x) {
-  // the mapper can't reference any outside variables because it needs to be
-  // serialized and sent to the worker
-  var P = require('bluebird');
+module.exports = function squareAsync(x) {
   return P.resolve()
     .then(function () {
       return x * x;
     });
-}
-
-(new Pool(4)).map([1, 2, 3], squareAsync)
-// resolves with [1, 4, 9]
-```
-
-## Callback + Module worker example
-```javascript
-// ./worker.js
-
-// job functions with an arity of 2 will be passed a callback
-module.exports = function squareAsync(x, cb) {
-  setTimeout(function () {
-    cb(null, x * x);
-  }, 1000);
 };
 ```
 
 ```javascript
 // ./main.js
-
 var Pool = require('multiprocessing').Pool;
 (new Pool(4)).map([1, 2, 3], __dirname + '/worker')
+  .then(function (res) {
+    // [1, 4, 9]
+  });
 ```
 
 ## Installation
