@@ -1,9 +1,58 @@
 {
+  /* eslint-disable quotes */
+
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
+  },
+
+  "ecmaFeatures": {
+    "arrowFunctions": true, // enable arrow functions
+    "binaryLiterals": true, // enable binary literals
+    "blockBindings": true, // enable let and const (aka block bindings)
+    "classes": true, // enable classes
+    "defaultParams": true, // enable default function parameters
+    "destructuring": true, // enable destructuring
+    "forOf": true, // enable for-of loops
+    "generators": true, // enable generators
+    "modules": false, // enable modules and global strict mode
+    "objectLiteralComputedProperties": true, // enable computed object literal property names
+    "objectLiteralDuplicateProperties": false, // enable duplicate object literal properties
+    "objectLiteralShorthandMethods": false, // enable object literal shorthand methods
+    "objectLiteralShorthandProperties": true, // enable object literal shorthand properties
+    "octalLiterals": true, // enable octal literals
+    "regexUFlag": true, // enable the regular expression u flag
+    "regexYFlag": true, // enable the regular expression y flag
+    "restParams": true, // enable the rest parameters
+    "spread": true, // enable the spread operator for arrays
+    "superInFunctions": true, // enable super references inside of functions
+    "templateStrings": true, // enable template strings
+    "unicodeCodePointEscapes": true, // enable code point escapes
+    "globalReturn": false, // allow return statements in the global scope
+    "jsx": true, // enable JSX
+    "experimentalObjectRestSpread": false // experimental object rest/spread properties
   },
 
   "rules": {
+
+/**
+ * ES6+
+ */
+    "arrow-body-style": 0,
+    "arrow-spacing": 2,
+    "constructor-super": 2,
+    "no-confusing-arrow": 2,
+    "no-class-assign": 2,
+    "no-const-assign": 2,
+    "no-dupe-class-members": 2,
+    "no-this-before-super": 2,
+    "no-var": 2,
+    "prefer-arrow-callback": 0,
+    "prefer-const": 2,
+    "prefer-reflect": 0,
+    "prefer-spread": 0,
+    "prefer-template": 2,
+    "require-yield": 0,
 
 /**
  * Variables
@@ -14,7 +63,7 @@
       "vars": "local",
       "args": "none"
     }],
-    "no-use-before-define": 2,
+    "no-use-before-define": 0,
     "no-undef": 2,
     "no-delete-var": 2,
 
@@ -48,20 +97,20 @@
     "valid-typeof": 2,
     "no-unexpected-multiline": 2,
 
+    // consistent-return had a bug and in eslint@2.x.x it is more strict, disabling for now
+    "consistent-return": 0,
 /**
  * Best practices
  */
     "no-extra-boolean-cast": 2,
-    "consistent-return": 0,
     "curly": [2, "multi-line"],
     "default-case": 2,
     "dot-notation": [2, {
       "allowKeywords": true
     }],
     "eqeqeq": 2,
-    "guard-for-in": 2,
+    "guard-for-in": 0,
     "no-caller": 2,
-    "no-else-return": 2,
     "no-eq-null": 2,
     "no-eval": 2,
     "no-extend-native": 2,
@@ -100,12 +149,10 @@
     "consistent-this": [2, "self"],
     "space-unary-ops": [1, {"words": true, "nonwords": false}],
     "space-in-parens": [2, "never"],
-    "object-curly-spacing": [2, "never"],
     "space-before-blocks": [2, "always"],
     "array-bracket-spacing": [2, "never"],
     "indent": [2, 2, {"SwitchCase": 1}],
-    "brace-style": [2,
-      "1tbs", {
+    "brace-style": [2, "1tbs", {
       "allowSingleLine": true
     }],
     "quotes": [
@@ -121,23 +168,20 @@
     "comma-style": [2, "last"],
     "eol-last": 2,
     "key-spacing": [0, {
-        "beforeColon": false,
-        "afterColon": true
+      "beforeColon": false,
+      "afterColon": true
     }],
-    "new-cap": 0,
     "no-multiple-empty-lines": [2, {
       "max": 2
     }],
     "no-unneeded-ternary": 2,
     "no-nested-ternary": 2,
-    "no-new-object": 2,
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
     "no-extra-parens": 0,
     "no-underscore-dangle": 0,
     "one-var": [2, "never"],
-    "padded-blocks": 0,
-    "semi": [2, "always"],
+    "semi": [2, "never"],
     "semi-spacing": [2, {
       "before": false,
       "after": true
@@ -149,7 +193,10 @@
     }],
     "space-infix-ops": 2,
     "spaced-comment": 2,
-
-    "no-multi-spaces": 0
+    "no-multi-spaces": 0,
+    "max-len": [2, 100, 2, {
+      "ignoreComments": false,
+      "ignoreUrls": true
+    }]
   }
 }
