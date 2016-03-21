@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/ryanpon/node-multiprocessing"
   },
+  "engines": {
+    "node": ">=4"
+  },
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js",
