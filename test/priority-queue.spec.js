@@ -1,17 +1,17 @@
-'use strict';
+'use strict'
 
-var PriorityQueue = require('../').PriorityQueue;
-var chai          = require('chai');
-var should        = chai.should();
-var P             = require('bluebird');
+const PriorityQueue = require('../').PriorityQueue
+const chai          = require('chai')
+const should        = chai.should()
+const P             = require('bluebird')
 
-chai.use(require('chai-as-promised'));
+chai.use(require('chai-as-promised'))
 
 describe('Priority Queue', function () {
 
   it('should process items', function () {
-    var pq = new PriorityQueue(2);
-    var fn = function (n) { return n * 2; };
+    const pq = new PriorityQueue(2)
+    const fn = function (n) { return n * 2 }
 
     return P.all([
       pq.push(1, 10, fn),
@@ -19,20 +19,20 @@ describe('Priority Queue', function () {
       pq.push(3, 10, fn)
     ])
       .spread(function (res1, res2, res3) {
-        should.exist(res1);
-        should.exist(res2);
-        should.exist(res3);
+        should.exist(res1)
+        should.exist(res2)
+        should.exist(res3)
 
-        res1.should.equal(2);
-        res2.should.equal(4);
-        res3.should.equal(6);
-      });
-  });
+        res1.should.equal(2)
+        res2.should.equal(4)
+        res3.should.equal(6)
+      })
+  })
 
   it('should process items in order with only 1 worker', function () {
-    var pq = new PriorityQueue(1);
-    var fn = function (n) { return n; };
-    var res = [];
+    const pq = new PriorityQueue(1)
+    const fn = function (n) { return n }
+    const res = []
     return P.all([
       pq.push(1, 10, fn).then(res.push.bind(res)),
       pq.push(3, 30, fn).then(res.push.bind(res)),
@@ -46,8 +46,8 @@ describe('Priority Queue', function () {
       .then(function () {
         // task 1 gets kicked off before the others start, so it should show up
         // first even with the lowest priority
-        res.should.eql([1, 8, 7, 6, 5, 4, 3, 2]);
-      });
-  });
+        res.should.eql([1, 8, 7, 6, 5, 4, 3, 2])
+      })
+  })
 
-});
+})

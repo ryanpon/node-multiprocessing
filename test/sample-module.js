@@ -1,5 +1,3 @@
-'use strict';
+'use strict'
 
-module.exports = function (name) {
-  return 'Hello, ' + name + '!';
-};
+module.exports = name => `Hello, ${name}!`
