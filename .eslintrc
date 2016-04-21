@@ -41,7 +41,7 @@
     "arrow-body-style": 0,
     "arrow-spacing": 2,
     "constructor-super": 2,
-    "no-confusing-arrow": 2,
+    "no-confusing-arrow": 0,
     "no-class-assign": 2,
     "no-const-assign": 2,
     "no-dupe-class-members": 2,

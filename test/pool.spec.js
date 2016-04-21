@@ -312,6 +312,46 @@ describe('Pool', function () {
 
   })
 
+  describe('#define', function () {
+
+    it('should fail when registering a name that already exists', function () {
+      const pool = new Pool(5)
+      pool.define('greet', `${__dirname}/sample-module`)
+      ;(function () {
+        pool.define('greet', `${__dirname}/sample-module`)
+      }).should.throw('Pool already has a property "greet"')
+    })
+
+    it('should provide a simple wrapper over apply', function () {
+      const pool = new Pool(5)
+      pool.define('square', x => x * x)
+      return pool.square.apply(5)
+        .then(function (res) {
+          res.should.equal(25)
+        })
+    })
+
+    it('should provide a simple wrapper over map', function () {
+      const pool = new Pool(5)
+      pool.define('square', x => x * x)
+      return pool.square.map([5, 2, 3])
+        .then(function (res) {
+          res.should.eql([25, 4, 9])
+        })
+    })
+
+    it('should work with modules', function () {
+      const pool = new Pool(5)
+      pool.define('greet', `${__dirname}/sample-module`)
+      return P.join(pool.greet.apply('World!!'), pool.greet.apply('Earth!!'))
+        .spread(function (res1, res2) {
+          res1.should.equal('Hello, World!!!')
+          res2.should.equal('Hello, Earth!!!')
+        })
+    })
+
+  })
+
   describe('Queue behavior', function () {
 
     it('should process multiple jobs sequentially for chunksizes of 1', function () {

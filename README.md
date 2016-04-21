@@ -1,7 +1,6 @@
 # node-multiprocessing
 Dead simple parallel processing for node
 
-
 ## Example
 
 ```javascript
