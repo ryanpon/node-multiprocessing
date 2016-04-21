@@ -4,18 +4,16 @@ Dead simple parallel processing for node
 ## Example
 
 ```javascript
-var Pool = require('multiprocessing').Pool;
+const Pool = require('multiprocessing').Pool;
 
 function square(x) {
   return x * x;
 }
 
-var pool = new Pool(4);  // spawns 4 child processes to complete your jobs
+const pool = new Pool(4);  // spawns 4 child processes to complete your jobs
 
 pool.map([1, 2, 3], square)
-  .then(function (result) {
-    console.log(result);
-  });
+  .then(result => console.log(result));
 
 // [1, 4, 9]
 ```
@@ -23,19 +21,16 @@ pool.map([1, 2, 3], square)
 ## Promise + Module worker example
 ```javascript
 // ./worker.js
-var P = require('bluebird');
+const P = require('bluebird');
 
 module.exports = function squareAsync(x) {
-  return P.resolve()
-    .then(function () {
-      return x * x;
-    });
+  return P.resolve().then(() => x * x);
 };
 ```
 
 ```javascript
 // ./main.js
-var Pool = require('multiprocessing').Pool;
+const Pool = require('multiprocessing').Pool;
 (new Pool(4)).map([1, 2, 3], __dirname + '/worker')
   .then(function (res) {
     // [1, 4, 9]
@@ -57,7 +52,7 @@ function good(x) {
   return x * x;  // I don't reference any outside variables
 }
 
-var two = 2;
+const two = 2;
 function bad(x) {
   return x * two;  // "two" wont be defined after being passed to the child proc
 }
@@ -86,16 +81,16 @@ Approximate maximum processing time to allow for a single item in the array. If 
 Recommended that you use this only for longer tasks, or as a way to prevent infinite loops. Timeouts below 200ms or so can be unreliable.
 
 ```javascript
-var Pool = require('multiprocessing').Pool;
+const Pool = require('multiprocessing').Pool;
 
 function anInfiniteLoop() {
   while (true) {}
 }
 
-var pool = new Pool(4);
+const pool = new Pool(4);
 
 pool.map([1, 2, 3, 4, 5], anInfiniteLoop, {timeout: 1000})
-  .catch(function (err) { console.log(err); });
+  .catch(err => console.log(err));
 
 // "Task timed out!"
 ```
@@ -124,14 +119,14 @@ A max priority queue built off of a pool of worker processes. Items with a highe
 Pushes an item onto the queue and returns a promise that will be resolved with the result or rejected if any errors were raised.
 
 ```javascript
-var PriorityQueue = require('multiprocessing').PriorityQueue;
+const PriorityQueue = require('multiprocessing').PriorityQueue;
 
 function square(x) {
   return x * x;
 }
 
 // one worker guarantees ordering -- multiple workers will only start tasks in order
-var pq = new PriorityQueue(1);
+const pq = new PriorityQueue(1);
 
 pq.push(25, 1, square).then(console.log),
 pq.push(100, 3, square).then(console.log),
