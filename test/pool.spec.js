@@ -5,10 +5,25 @@ const chai   = require('chai')
 const should = chai.should()
 const _      = require('lodash')
 const P      = require('bluebird')
+const os     = require('os')
 
 chai.use(require('chai-as-promised'))
 
 describe('Pool', function () {
+
+  describe('constructor', function () {
+
+    it('should adhere to the number of workers passed in', function () {
+      const pool = new Pool(4)
+      pool.workers.should.have.length(4)
+    })
+
+    it('should default to number of CPUs on the machine num workers is not passed', function () {
+      const pool = new Pool()
+      pool.workers.should.have.length(os.cpus().length)
+    })
+
+  })
 
   describe('#close', function () {
 
