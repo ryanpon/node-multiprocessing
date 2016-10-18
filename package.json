@@ -1,13 +1,13 @@
 {
   "name": "multiprocessing",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "Dead simple parallel processing for node",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanpon/node-multiprocessing"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=4.0.0"
   },
   "main": "index.js",
   "scripts": {
@@ -35,8 +35,5 @@
     "eslint-plugin-babel": "^3.2.0",
     "lodash": "^3.10.1",
     "mocha": "^2.3.3"
-  },
-  "engines": {
-    "node" : ">=4.0.0"
   }
 }
