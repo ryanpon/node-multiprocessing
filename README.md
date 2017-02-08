@@ -2,7 +2,6 @@
 Dead simple parallel processing for node
 
 ## Version 1.0 upgrade notes
-- For Node versions <4.0, stay on multiprocessing@0.5.1
 - Upgrades Bluebird from ^2 to ^3 ([see details here](http://bluebirdjs.com/docs/new-in-bluebird-3.html))
 
 ## Example
