@@ -1,5 +1,5 @@
 'use strict'
 
-exports.Pool          = require('./lib/pool')
-exports.PriorityQueue = require('./lib/priority-queue')
-exports._Heap         = require('./lib/heap')
+exports.Pool          = require('./build/pool')
+exports.PriorityQueue = require('./build/priority-queue')
+exports._Heap         = require('./build/heap')

@@ -6,14 +6,19 @@
     "type": "git",
     "url": "https://github.com/ryanpon/node-multiprocessing"
   },
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "main": "index.js",
   "scripts": {
+    "preversion": "npm run test",
+    "pretest": "npm run build",
     "test": "./node_modules/mocha/bin/mocha test/**/*.spec.js",
     "bench": "node ./test/bench.js",
+    "build": "babel lib -d build",
     "lint": "eslint ."
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
   },
   "keywords": [
     "multiprocessing",
@@ -25,15 +30,17 @@
   "author": "Ryan Pon",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.4.6"
+    "bluebird": "^3.4.7"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
+    "babel-cli": "^6.22.2",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-latest": "^6.22.0",
     "chai": "^3.5.0",
-    "chai-as-promised": "^5.3.0",
-    "eslint": "^2.13.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "lodash": "^3.10.1",
-    "mocha": "^2.5.3"
+    "chai-as-promised": "^6.0.0",
+    "eslint": "^3.15.0",
+    "eslint-plugin-babel": "^4.0.1",
+    "lodash": "^4.17.4",
+    "mocha": "^3.2.0"
   }
 }

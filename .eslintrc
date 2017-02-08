@@ -45,7 +45,6 @@
 /**
  * eslint-plugin-babel rule toggles
  */
-    "babel/generator-star-spacing": [2, "after"],
     "babel/new-cap": 0,
     "babel/array-bracket-spacing": 0,
     "babel/object-curly-spacing": [2, "never"],
@@ -56,6 +55,7 @@
 /**
  * ES6+
  */
+    "generator-star-spacing": [2, "after"],
     "arrow-body-style": 0,
     "arrow-spacing": 2,
     "constructor-super": 2,
