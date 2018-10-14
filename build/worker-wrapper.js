@@ -97,7 +97,7 @@ module.exports = function () {
         return;
       } // TODO: should this be an error?
 
-      this.registeredJobs[jobId] = { callback: callback, fnOrModulePath: fnOrModulePath, timeout: timeout };
+      this.registeredJobs[jobId] = { callback: callback, fnOrModulePath: fnOrModulePath, timeout: timeout, options: options };
       var modulePath = typeof fnOrModulePath === 'string' ? fnOrModulePath : null;
       var fnStr = typeof fnOrModulePath === 'function' ? fnOrModulePath.toString() : null;
       this.process.send({

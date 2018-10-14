@@ -229,6 +229,22 @@ describe('Pool', function () {
         })
     })
 
+    it('should call a callback function on each result', function ()  {
+      const pool = new Pool(2)
+      const callbacks = []
+      const onResult = (result, index) => {
+        callbacks.push([result, index])
+        callbacks.sort()
+      }
+      return pool.map([1, 2], x => x, {onResult})
+        .then(function (result) {
+          callbacks.should.eql([
+            [1, 0],
+            [2, 1]
+          ])
+        })
+    })
+
   })
 
   describe('#apply', function () {
