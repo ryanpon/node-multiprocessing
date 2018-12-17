@@ -29,13 +29,11 @@ function processData(argList, jobId, index) {
   }
 
   try {
-    (function () {
-      var fn = jobFns[jobId];
-      argList.forEach(function (args, offset) {
-        var res = fn(args);
-        return isPromise(res) ? handlePromise(res, offset) : sendSucess(res, offset);
-      });
-    })();
+    var fn = jobFns[jobId];
+    argList.forEach(function (args, offset) {
+      var res = fn(args);
+      return isPromise(res) ? handlePromise(res, offset) : sendSucess(res, offset);
+    });
   } catch (err) {
     return sendErr(err);
   }

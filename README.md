@@ -15,8 +15,7 @@ function square(x) {
 
 const pool = new Pool(4);  // spawns 4 child processes to complete your jobs
 
-pool.map([1, 2, 3], square, {onResult: result => { doSomethingWith(result); }})
-  .then(result => console.log(result));
+pool.map([1, 2, 3], square).then(result => console.log(result));
 
 // [1, 4, 9]
 ```
@@ -77,6 +76,27 @@ As the function must be stringified before being passed to the child process, I 
 
 ###### Option: chunksize
 Chunksize determines the number of array elements to be passed to the work process at once. By default, the chunksize will default to the array length divided by the number of available workers. Setting this to 1 is fine for tasks that are expected to be very large, but smaller tasks will run much faster with a larger chunksize.
+
+###### Option: onResult
+Takes a function that is called with each result as it comes in. Useful for streaming.
+
+NOTE: The onResult is called in whatever order results come back in. This may not be the same order as the input array.
+
+```javascript
+const Pool = require('multiprocessing').Pool;
+
+function square(x) {
+  return x * x;
+}
+
+const pool = new Pool(4);
+
+result = []
+pool.map([1, 2, 3], square, {onResult: val => { result.push(val) }})
+  .then(() => console.log(result));
+// prints "[4, 9, 1]"
+// OR in some other order, depending on how we receive the results!
+```
 
 ###### Option: timeout [experimental]
 Approximate maximum processing time to allow for a single item in the array. If more than the alloted time passes, the mapper promise will be rejected with an error saying that the task timed out.
