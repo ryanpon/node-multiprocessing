@@ -149,6 +149,9 @@ module.exports = function () {
           }
 
           result[data.index] = jsonUtils.safeParse(data.result);
+          if (job.options && job.options.onResult) {
+            job.options.onResult(result[data.index], data.index);
+          }
           tasksRemaining -= 1;
           if (tasksRemaining <= 0) {
             worker.deregisterJob(job.id);

@@ -15,7 +15,7 @@ function square(x) {
 
 const pool = new Pool(4);  // spawns 4 child processes to complete your jobs
 
-pool.map([1, 2, 3], square)
+pool.map([1, 2, 3], square, {onResult: result => { doSomethingWith(result); }})
   .then(result => console.log(result));
 
 // [1, 4, 9]
